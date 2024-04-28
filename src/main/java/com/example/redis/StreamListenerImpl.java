@@ -9,7 +9,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-@Service
+//@Service
 public class StreamListenerImpl implements StreamListener<String, ObjectRecord<String, MessageDTO>> {
 
     private Mono<MessageDTO> process(Mono<MessageDTO> messageDTO){

@@ -1,6 +1,7 @@
 package com.example.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.connection.stream.ObjectRecord;
 import org.springframework.data.redis.connection.stream.RecordId;
 import org.springframework.data.redis.connection.stream.StreamRecords;
@@ -12,14 +13,15 @@ import reactor.core.publisher.Mono;
 public class StreamProducerImpl {
 
     @Autowired
-    private ReactiveRedisTemplate<String, String> redisTemplate;
+    @Qualifier("messageDTOReactiveRedisTemplate")
+    private ReactiveRedisTemplate<String, MessageDTO> messageDTOReactiveRedisTemplate;
 
     public Mono<RecordId> publishEvent(MessageDTO messageDTO){
         ObjectRecord<String, MessageDTO> record = StreamRecords.newRecord()
                 .ofObject(messageDTO)
                 .withStreamKey("dequeue");
 
-        return this.redisTemplate.opsForStream()
+        return this.messageDTOReactiveRedisTemplate.opsForStream()
                 .add(record);
     }
 
